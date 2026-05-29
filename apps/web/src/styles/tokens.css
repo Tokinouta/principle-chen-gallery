@@ -1,0 +1,58 @@
+:root {
+  color-scheme: light;
+
+  --color-paper: #fbf4df;
+  --color-paper-deep: #eadbb7;
+  --color-paper-bright: #fffaf0;
+  --color-ink: #231c18;
+  --color-ink-soft: #4e4036;
+  --color-oxblood: #7d1f1f;
+  --color-oxblood-bright: #9d3029;
+  --color-moss: #43543a;
+  --color-moss-soft: #647756;
+  --color-aged-gold: #b08a38;
+  --color-aged-gold-bright: #d0ad61;
+  --color-shadow: rgba(35, 28, 24, 0.22);
+  --color-shadow-deep: rgba(35, 28, 24, 0.38);
+  --color-wash-gold: rgba(176, 138, 56, 0.16);
+  --color-wash-moss: rgba(67, 84, 58, 0.16);
+  --color-wash-oxblood: rgba(125, 31, 31, 0.14);
+
+  --font-display: Georgia, 'Times New Roman', serif;
+  --font-body: 'Iowan Old Style', 'Palatino Linotype', Palatino, serif;
+
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4rem;
+
+  --text-caption: 0.78rem;
+  --text-small: 0.92rem;
+  --text-body: 1rem;
+  --text-lead: clamp(1.05rem, 1vw + 0.85rem, 1.28rem);
+  --text-title: clamp(1.35rem, 2vw, 1.95rem);
+  --text-display: clamp(2.55rem, 8vw, 6.9rem);
+
+  --radius-small: 0.25rem;
+  --radius-medium: 0.85rem;
+  --radius-large: 1.5rem;
+  --radius-round: 999px;
+
+  --border-hairline: 1px solid rgba(35, 28, 24, 0.24);
+  --border-gold: 1px solid rgba(176, 138, 56, 0.76);
+  --border-double: 0.25rem double rgba(176, 138, 56, 0.74);
+
+  --shadow-card: 0 1rem 2.5rem var(--color-shadow);
+  --shadow-panel: 0 2rem 5rem var(--color-shadow-deep);
+  --shadow-inset-frame: inset 0 0 0 1px rgba(35, 28, 24, 0.15), inset 0 0 0 0.45rem rgba(255, 250, 240, 0.55);
+  --focus-ring: 0 0 0 0.18rem var(--color-paper-bright), 0 0 0 0.36rem var(--color-oxblood-bright);
+
+  --duration-fast: 160ms;
+  --duration-medium: 260ms;
+  --duration-slow: 620ms;
+  --ease-ornate: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
