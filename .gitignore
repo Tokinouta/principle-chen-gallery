@@ -137,5 +137,16 @@ vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
 
+# Local agent/session state
+.sisyphus/
+
+# Playwright generated artifacts
+playwright-report/
+test-results/
+
+# TypeScript config build outputs
+*.config.js
+*.config.d.ts
+
 # macOS specific
 .DS_Store
