@@ -83,6 +83,46 @@ test.describe("Gallery MVP", () => {
     await expect(dialog.getByText("Pianoforte theme")).toBeVisible();
   });
 
+  test("detail dialog remains reachable and contains scrolling in a short viewport", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 900, height: 360 });
+    await page.goto("/");
+
+    await page
+      .getByRole("button", { name: /Study of Ophelia Among the Reeds/i })
+      .click();
+
+    const dialog = page.getByRole("dialog", {
+      name: /Study of Ophelia Among the Reeds/i,
+    });
+    await expect(dialog).toBeVisible();
+
+    const modalMetrics = await dialog.evaluate((element) => {
+      const rect = element.getBoundingClientRect();
+      return {
+        top: rect.top,
+        bottom: rect.bottom,
+        clientHeight: element.clientHeight,
+        scrollHeight: element.scrollHeight,
+        bodyOverflow: getComputedStyle(document.body).overflow,
+        documentOverflow: getComputedStyle(document.documentElement).overflow,
+      };
+    });
+
+    expect(modalMetrics.top).toBeGreaterThanOrEqual(0);
+    expect(modalMetrics.bottom).toBeLessThanOrEqual(360);
+    expect(modalMetrics.scrollHeight).toBeGreaterThan(modalMetrics.clientHeight);
+    expect([modalMetrics.bodyOverflow, modalMetrics.documentOverflow]).toContain("hidden");
+
+    const pageScrollBefore = await page.evaluate(() => window.scrollY);
+    await dialog.hover();
+    await page.mouse.wheel(0, 700);
+
+    await expect.poll(async () => dialog.evaluate((element) => element.scrollTop)).toBeGreaterThan(0);
+    await expect.poll(async () => page.evaluate(() => window.scrollY)).toBe(pageScrollBefore);
+  });
+
   test("OSS credentials never appear in API responses or HTML", async ({
     page,
     request,

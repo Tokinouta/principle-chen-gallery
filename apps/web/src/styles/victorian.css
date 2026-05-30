@@ -284,6 +284,10 @@
   color: var(--color-moss);
 }
 
+.modal-scroll-lock {
+  overflow: hidden;
+}
+
 .detail-backdrop {
   position: fixed;
   inset: 0;
@@ -292,8 +296,9 @@
   width: 100%;
   min-width: 0;
   padding: clamp(var(--space-3), 4vw, var(--space-6));
-  overflow: auto;
+  overflow: hidden;
   place-items: center;
+  overscroll-behavior: contain;
   background:
     radial-gradient(circle at 50% 30%, rgba(176, 138, 56, 0.2), transparent 22rem),
     rgba(35, 28, 24, 0.62);
@@ -303,8 +308,10 @@
   position: relative;
   width: min(100%, 47rem);
   max-width: 100%;
+  max-height: calc(100dvh - (clamp(var(--space-3), 4vw, var(--space-6)) * 2));
   padding: clamp(var(--space-6), 6vw, var(--space-8)) clamp(var(--space-4), 5vw, var(--space-7)) clamp(var(--space-5), 5vw, var(--space-7));
-  overflow: hidden;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
   border: var(--border-gold);
   border-radius: var(--radius-large);
   box-shadow: var(--shadow-panel);

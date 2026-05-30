@@ -41,6 +41,16 @@ export function App() {
     };
   }, [query]);
 
+  useEffect(() => {
+    document.documentElement.classList.toggle('modal-scroll-lock', selectedArtwork !== null);
+    document.body.classList.toggle('modal-scroll-lock', selectedArtwork !== null);
+
+    return () => {
+      document.documentElement.classList.remove('modal-scroll-lock');
+      document.body.classList.remove('modal-scroll-lock');
+    };
+  }, [selectedArtwork]);
+
   return (
     <main className="page-shell">
       <header className="gallery-masthead">
