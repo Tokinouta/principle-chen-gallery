@@ -78,6 +78,11 @@ web_modules/
 .next
 out
 
+# Nuxt.js build / generate output
+.nuxt
+dist
+.output
+
 # Gatsby files
 .cache/
 # Comment in the public line in if your project uses Gatsby and not Next.js
@@ -158,3 +163,5 @@ test-results/
 *.sqlite-journal
 apps/api/prisma/*.db
 apps/api/prisma/*.db-journal
+
+data/
