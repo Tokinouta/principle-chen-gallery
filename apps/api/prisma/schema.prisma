@@ -1,0 +1,66 @@
+// Prisma schema for Galleria Principii.
+// Provider: SQLite for this phase. Schema kept portable for a future
+// Postgres migration (no SQLite-only column types, no JSON columns,
+// status stored as a constrained string instead of a DB-level enum).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Artwork {
+  id          String         @id
+  title       String
+  artist      String
+  year        Int
+  medium      String
+  period      String
+  summary     String
+  description String
+  // status: "draft" | "published" | "archived". Enforced in app layer.
+  status      String         @default("published")
+  sortOrder   Int            @default(0)
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  media       ArtworkMedia[]
+
+  @@index([status, sortOrder])
+}
+
+model MediaAsset {
+  id              String         @id
+  ossBucket       String
+  ossRegion       String
+  ossKey          String
+  // mediaType: "image" | "video" | "audio". Enforced in app layer.
+  mediaType       String
+  mimeType        String
+  byteSize        Int
+  width           Int?
+  height          Int?
+  durationSeconds Int?
+  altText         String?
+  transcript      String?
+  caption         String?
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  artworks        ArtworkMedia[]
+}
+
+model ArtworkMedia {
+  id           String     @id
+  artworkId    String
+  mediaAssetId String
+  // role: "primary" | "thumbnail" | "detail" | "video" | "audio" | "soundtrack".
+  role         String
+  sortOrder    Int        @default(0)
+  artwork      Artwork    @relation(fields: [artworkId], references: [id], onDelete: Cascade)
+  mediaAsset   MediaAsset @relation(fields: [mediaAssetId], references: [id], onDelete: Cascade)
+
+  @@unique([artworkId, mediaAssetId, role])
+  @@index([artworkId, sortOrder])
+}

@@ -5,6 +5,17 @@ const host = process.env.HOST ?? '127.0.0.1';
 
 const app = buildApp();
 
+const shutdown = async (): Promise<void> => {
+  await app.close();
+};
+
+process.on('SIGINT', () => {
+  void shutdown();
+});
+process.on('SIGTERM', () => {
+  void shutdown();
+});
+
 try {
   await app.listen({ port, host });
 } catch (error) {

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { fetchArtworks, type Artwork } from './api/artworks';
 import { ArtworkDetail } from './components/ArtworkDetail';
 import { GalleryGrid } from './components/GalleryGrid';
@@ -9,18 +9,6 @@ import './styles/global.css';
 import './styles/victorian.css';
 
 type GalleryStatus = 'loading' | 'ready' | 'error';
-
-function artworkMatchesQuery(artwork: Artwork, query: string): boolean {
-  const normalizedQuery = query.trim().toLowerCase();
-
-  if (normalizedQuery.length === 0) {
-    return true;
-  }
-
-  return [artwork.title, artwork.artist, artwork.medium, String(artwork.year)].some((value) =>
-    value.toLowerCase().includes(normalizedQuery),
-  );
-}
 
 export function App() {
   const [artworks, setArtworks] = useState<Artwork[]>([]);
@@ -33,8 +21,7 @@ export function App() {
 
     async function loadGallery() {
       try {
-        const catalogue = await fetchArtworks();
-
+        const catalogue = await fetchArtworks({ search: query });
         if (isCurrentRequest) {
           setArtworks(catalogue);
           setStatus('ready');
@@ -46,17 +33,13 @@ export function App() {
       }
     }
 
+    setStatus((prev) => (prev === 'error' ? 'loading' : prev));
     void loadGallery();
 
     return () => {
       isCurrentRequest = false;
     };
-  }, []);
-
-  const visibleArtworks = useMemo(
-    () => artworks.filter((artwork) => artworkMatchesQuery(artwork, query)),
-    [artworks, query],
-  );
+  }, [query]);
 
   return (
     <main className="page-shell">
@@ -79,8 +62,8 @@ export function App() {
           <div className="gallery-controls">
             <SearchBox query={query} onQueryChange={setQuery} />
           </div>
-          {visibleArtworks.length > 0 ? (
-            <GalleryGrid artworks={visibleArtworks} onSelectArtwork={setSelectedArtwork} />
+          {artworks.length > 0 ? (
+            <GalleryGrid artworks={artworks} onSelectArtwork={setSelectedArtwork} />
           ) : (
             <EmptyState />
           )}

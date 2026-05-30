@@ -1,5 +1,11 @@
 import { defineConfig } from "@playwright/test";
 
+const apiEnv = {
+  DATABASE_URL: "file:./e2e.db",
+  ALIYUN_OSS_REGION: process.env.ALIYUN_OSS_REGION ?? "oss-cn-hangzhou",
+  ALIYUN_OSS_BUCKET: process.env.ALIYUN_OSS_BUCKET ?? "galleria-principii-media",
+};
+
 export default defineConfig({
   testDir: ".",
   fullyParallel: false,
@@ -9,6 +15,7 @@ export default defineConfig({
   reporter: "html",
   timeout: 30_000,
   expect: { timeout: 10_000 },
+  globalSetup: "./global-setup.ts",
 
   use: {
     baseURL: "http://localhost:5173",
@@ -32,6 +39,7 @@ export default defineConfig({
       port: 3000,
       reuseExistingServer: !process.env.CI,
       timeout: 30_000,
+      env: apiEnv,
     },
     {
       command: "npm run dev --workspace @galleria-principii/web",

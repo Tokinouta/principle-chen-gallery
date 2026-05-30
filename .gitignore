@@ -150,3 +150,11 @@ test-results/
 
 # macOS specific
 .DS_Store
+
+# SQLite (Prisma local dev/test)
+*.db
+*.db-journal
+*.sqlite
+*.sqlite-journal
+apps/api/prisma/*.db
+apps/api/prisma/*.db-journal
