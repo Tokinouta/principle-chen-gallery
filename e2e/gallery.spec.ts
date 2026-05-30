@@ -83,6 +83,31 @@ test.describe("Gallery MVP", () => {
     await expect(dialog.getByText("Pianoforte theme")).toBeVisible();
   });
 
+  test("clicking the backdrop closes the detail dialog without closing from inside content", async ({
+    page,
+  }) => {
+    await page.goto("/");
+
+    const artworkCard = page.getByRole("button", {
+      name: /Study of Ophelia Among the Reeds/i,
+    });
+    await expect(artworkCard).toBeVisible();
+    await artworkCard.click();
+
+    const dialog = page.getByRole("dialog", {
+      name: /Study of Ophelia Among the Reeds/i,
+    });
+    await expect(dialog).toBeVisible();
+
+    await dialog.getByRole("heading", { name: /Study of Ophelia Among the Reeds/i }).click();
+    await expect(dialog).toBeVisible();
+
+    await page.locator(".detail-backdrop").click({ position: { x: 12, y: 12 } });
+
+    await expect(dialog).toHaveCount(0);
+    await expect(artworkCard).toBeVisible();
+  });
+
   test("detail dialog remains reachable and contains scrolling in a short viewport", async ({
     page,
   }) => {

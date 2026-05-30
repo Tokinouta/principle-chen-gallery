@@ -76,8 +76,14 @@ export function ArtworkDetail({ artwork, onClose }: ArtworkDetailProps) {
   const sortedMedia = sortByRoleAndOrder(artwork.media);
 
   return (
-    <div className="detail-backdrop">
-      <article className="detail-panel" role="dialog" aria-modal="true" aria-labelledby="artwork-detail-title">
+    <div className="detail-backdrop" onClick={onClose}>
+      <article
+        className="detail-panel"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="artwork-detail-title"
+        onClick={(event) => event.stopPropagation()}
+      >
         <div className="detail-frame">
           <button className="detail-close" type="button" onClick={onClose}>
             Return to gallery
