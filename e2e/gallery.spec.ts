@@ -98,13 +98,23 @@ test.describe("Gallery MVP", () => {
     });
     await expect(dialog).toBeVisible();
 
+    const frame = dialog.locator(".detail-frame");
+    await expect(frame).toBeVisible();
+
     const modalMetrics = await dialog.evaluate((element) => {
+      const frameElement = element.querySelector(".detail-frame");
+      if (!(frameElement instanceof HTMLElement)) {
+        throw new Error("detail frame not found");
+      }
+
       const rect = element.getBoundingClientRect();
+      const frameRect = frameElement.getBoundingClientRect();
       return {
         top: rect.top,
         bottom: rect.bottom,
         clientHeight: element.clientHeight,
         scrollHeight: element.scrollHeight,
+        frameHeight: frameRect.height,
         bodyOverflow: getComputedStyle(document.body).overflow,
         documentOverflow: getComputedStyle(document.documentElement).overflow,
       };
@@ -113,13 +123,16 @@ test.describe("Gallery MVP", () => {
     expect(modalMetrics.top).toBeGreaterThanOrEqual(0);
     expect(modalMetrics.bottom).toBeLessThanOrEqual(360);
     expect(modalMetrics.scrollHeight).toBeGreaterThan(modalMetrics.clientHeight);
+    expect(modalMetrics.frameHeight).toBeGreaterThan(modalMetrics.clientHeight);
     expect([modalMetrics.bodyOverflow, modalMetrics.documentOverflow]).toContain("hidden");
 
     const pageScrollBefore = await page.evaluate(() => window.scrollY);
+    const frameTopBefore = await frame.evaluate((element) => element.getBoundingClientRect().top);
     await dialog.hover();
     await page.mouse.wheel(0, 700);
 
     await expect.poll(async () => dialog.evaluate((element) => element.scrollTop)).toBeGreaterThan(0);
+    await expect.poll(async () => frame.evaluate((element) => element.getBoundingClientRect().top)).toBeLessThan(frameTopBefore);
     await expect.poll(async () => page.evaluate(() => window.scrollY)).toBe(pageScrollBefore);
   });
 

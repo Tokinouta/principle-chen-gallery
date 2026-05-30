@@ -78,33 +78,35 @@ export function ArtworkDetail({ artwork, onClose }: ArtworkDetailProps) {
   return (
     <div className="detail-backdrop">
       <article className="detail-panel" role="dialog" aria-modal="true" aria-labelledby="artwork-detail-title">
-        <button className="detail-close" type="button" onClick={onClose}>
-          Return to gallery
-        </button>
-        <p className="gallery-kicker">
-          <span className="ornament" aria-hidden="true">✦</span>
-          Private viewing
-          <span className="ornament" aria-hidden="true">✦</span>
-        </p>
-        <h2 className="detail-title" id="artwork-detail-title">{artwork.title}</h2>
-        <dl className="detail-list">
-          <dt>Artist</dt>
-          <dd>{artwork.artist}</dd>
-          <dt>Year</dt>
-          <dd>{artwork.year}</dd>
-          <dt>Medium</dt>
-          <dd>{artwork.medium}</dd>
-          <dt>Period</dt>
-          <dd>{artwork.period}</dd>
-        </dl>
-        <p className="detail-description">{artwork.description}</p>
-        {sortedMedia.length > 0 ? (
-          <section className="detail-media-grid" aria-label="Artwork media">
-            {sortedMedia.map((asset) => (
-              <MediaRenderer key={asset.id} asset={asset} artworkTitle={artwork.title} />
-            ))}
-          </section>
-        ) : null}
+        <div className="detail-frame">
+          <button className="detail-close" type="button" onClick={onClose}>
+            Return to gallery
+          </button>
+          <p className="gallery-kicker">
+            <span className="ornament" aria-hidden="true">✦</span>
+            Private viewing
+            <span className="ornament" aria-hidden="true">✦</span>
+          </p>
+          <h2 className="detail-title" id="artwork-detail-title">{artwork.title}</h2>
+          <dl className="detail-list">
+            <dt>Artist</dt>
+            <dd>{artwork.artist}</dd>
+            <dt>Year</dt>
+            <dd>{artwork.year}</dd>
+            <dt>Medium</dt>
+            <dd>{artwork.medium}</dd>
+            <dt>Period</dt>
+            <dd>{artwork.period}</dd>
+          </dl>
+          <p className="detail-description">{artwork.description}</p>
+          {sortedMedia.length > 0 ? (
+            <section className="detail-media-grid" aria-label="Artwork media">
+              {sortedMedia.map((asset) => (
+                <MediaRenderer key={asset.id} asset={asset} artworkTitle={artwork.title} />
+              ))}
+            </section>
+          ) : null}
+        </div>
       </article>
     </div>
   );
