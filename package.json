@@ -17,6 +17,7 @@
     "test:api": "npm run test --workspace @galleria-principii/api",
     "test:web": "npm run test --workspace @galleria-principii/web",
     "test:e2e": "playwright test --config e2e/playwright.config.ts",
+    "add-artwork": "npm run cli:add-artwork --workspace @galleria-principii/api --",
     "verify": "npm run typecheck && npm run test && npm run build && npm run test:e2e"
   },
   "devDependencies": {

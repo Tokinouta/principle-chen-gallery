@@ -13,7 +13,8 @@
     "prisma:migrate": "prisma migrate dev",
     "prisma:migrate:deploy": "prisma migrate deploy",
     "prisma:seed": "tsx prisma/seed.ts",
-    "db:reset": "prisma migrate reset --force"
+    "db:reset": "prisma migrate reset --force",
+    "cli:add-artwork": "tsx --env-file=../../.env src/cli/addArtwork.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
