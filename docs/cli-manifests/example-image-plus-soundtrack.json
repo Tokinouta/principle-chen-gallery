@@ -1,0 +1,36 @@
+{
+  "artwork": {
+    "id": "moor-evensong",
+    "title": "Moor Evensong",
+    "artist": "Beatrice Lydgate",
+    "year": 1879,
+    "medium": "Watercolour and gouache",
+    "period": "Victorian Aesthetic",
+    "summary": "Heather light and a distant chapel bell at evensong.",
+    "description": "Soft watercolour washes of moorland evening light, paired with a short pianoforte phrase intended for the panel.",
+    "status": "published"
+  },
+  "media": [
+    {
+      "id": "moor-evensong-primary",
+      "file": "./assets/moor-evensong/primary.jpg",
+      "role": "primary",
+      "mediaType": "image",
+      "mimeType": "image/jpeg",
+      "altText": "Watercolour moorland at evening with a distant chapel.",
+      "caption": "Primary panel.",
+      "width": 1600,
+      "height": 1100
+    },
+    {
+      "id": "moor-evensong-soundtrack",
+      "file": "./assets/moor-evensong/theme.mp3",
+      "role": "soundtrack",
+      "mediaType": "audio",
+      "mimeType": "audio/mpeg",
+      "caption": "Pianoforte phrase intended for the panel.",
+      "transcript": "Slow pianoforte in B minor; one repeating bell-like motif.",
+      "durationSeconds": 78
+    }
+  ]
+}

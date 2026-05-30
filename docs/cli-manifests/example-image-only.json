@@ -1,0 +1,27 @@
+{
+  "artwork": {
+    "id": "harbor-lanterns",
+    "title": "Harbour Lanterns at Slack Water",
+    "artist": "Marian Elmsworth",
+    "year": 1871,
+    "medium": "Oil on canvas",
+    "period": "Victorian Social Realism",
+    "summary": "Lanterns floating across a still harbour at dusk.",
+    "description": "A restrained dusk study of lantern light, quiet water, and the silhouette of harbour cranes.",
+    "status": "published",
+    "sortOrder": 10
+  },
+  "media": [
+    {
+      "id": "harbor-lanterns-primary",
+      "file": "./assets/harbor-lanterns/primary.jpg",
+      "role": "primary",
+      "mediaType": "image",
+      "mimeType": "image/jpeg",
+      "altText": "Lanterns drifting across a still Victorian harbour at dusk.",
+      "caption": "Primary panel, exhibited Whitby 1872.",
+      "width": 1800,
+      "height": 1200
+    }
+  ]
+}
