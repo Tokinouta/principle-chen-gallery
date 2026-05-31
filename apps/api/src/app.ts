@@ -1,4 +1,4 @@
-import Fastify from 'fastify';
+import Fastify, { type FastifyServerOptions } from 'fastify';
 
 import { loadConfig, type AppConfig } from './config/env.js';
 import { createPrismaClient } from './db/prisma.js';
@@ -7,6 +7,14 @@ import { createArtworkRepository } from './repositories/artworkRepository.js';
 import { createArtworkRoutes } from './routes/artworks.js';
 import { healthRoutes } from './routes/health.js';
 import { createOssSigner, type OssSigner } from './services/ossSigner.js';
+
+function resolveLoggerOption(): FastifyServerOptions['logger'] {
+  const raw = process.env.LOG_LEVEL?.trim().toLowerCase();
+  if (!raw || raw === 'off' || raw === 'silent' || raw === 'false') {
+    return false;
+  }
+  return { level: raw };
+}
 
 export type AppDeps = {
   config?: AppConfig;
@@ -20,7 +28,7 @@ export function buildApp(deps: AppDeps = {}) {
   const signer = deps.signer ?? createOssSigner(config.oss);
 
   const app = Fastify({
-    logger: false
+    logger: resolveLoggerOption()
   });
 
   void app.register(healthRoutes);
