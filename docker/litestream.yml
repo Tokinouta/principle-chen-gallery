@@ -1,0 +1,15 @@
+dbs:
+  - path: /data/prod.db
+    replicas:
+      - type: s3
+        endpoint: https://oss-cn-beijing.aliyuncs.com
+        bucket: ${LITESTREAM_OSS_BUCKET}
+        path: ${LITESTREAM_OSS_PATH}
+        region: oss-cn-beijing
+        access-key-id: ${LITESTREAM_ACCESS_KEY_ID}
+        secret-access-key: ${LITESTREAM_ACCESS_KEY_SECRET}
+        force-path-style: true
+        retention: 168h
+        retention-check-interval: 1h
+        snapshot-interval: 24h
+        sync-interval: 10s

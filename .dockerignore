@@ -1,0 +1,55 @@
+# VCS
+.git
+.gitignore
+
+# Local secrets and env files - production env comes from docker-compose.
+.env
+.env.*
+!.env.production.example
+
+# Local databases and uploaded media (these belong on a volume, not in the image)
+*.db
+*.db-journal
+*.sqlite
+*.sqlite-journal
+apps/api/prisma/*.db
+apps/api/prisma/*.db-journal
+data/
+
+# Node / build artifacts (rebuilt inside the image)
+node_modules
+**/node_modules
+dist
+**/dist
+.cache
+.parcel-cache
+*.tsbuildinfo
+
+# Test + tooling outputs
+playwright-report
+test-results
+coverage
+.npm
+.eslintcache
+.stylelintcache
+
+# Editor and OS clutter
+.vscode
+.idea
+.DS_Store
+
+# Local agent/session state
+.sisyphus
+
+# Docs and design specs (not needed at runtime)
+docs/
+README.md
+
+# Tests and E2E sources (not needed at runtime)
+e2e/
+apps/api/test/
+apps/web/test/
+apps/web/src/**/__tests__/
+
+# Misc
+*.log

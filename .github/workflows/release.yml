@@ -1,0 +1,74 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Extra tag to publish (in addition to sha and latest)
+        required: false
+        default: ""
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  ACR_REGISTRY: crpi-8rw8lz2mj8ksyb8x.cn-beijing.personal.cr.aliyuncs.com
+  ACR_REPOSITORY: rarara/my-image-registry
+
+jobs:
+  build-and-push:
+    name: Build and push API image
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Compute image tags
+        id: tags
+        run: |
+          set -eu
+          SHORT_SHA="${GITHUB_SHA::7}"
+          TAGS="${ACR_REGISTRY}/${ACR_REPOSITORY}:${SHORT_SHA}"
+          TAGS="${TAGS},${ACR_REGISTRY}/${ACR_REPOSITORY}:latest"
+          EXTRA="${{ github.event.inputs.tag }}"
+          if [ -n "${EXTRA}" ]; then
+            TAGS="${TAGS},${ACR_REGISTRY}/${ACR_REPOSITORY}:${EXTRA}"
+          fi
+          echo "tags=${TAGS}" >> "$GITHUB_OUTPUT"
+          echo "short_sha=${SHORT_SHA}" >> "$GITHUB_OUTPUT"
+
+      - name: Log in to Aliyun Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.ACR_REGISTRY }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          tags: ${{ steps.tags.outputs.tags }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          provenance: false
+
+      - name: Summary
+        run: |
+          {
+            echo "### Image published"
+            echo
+            echo "- \`${ACR_REGISTRY}/${ACR_REPOSITORY}:${{ steps.tags.outputs.short_sha }}\`"
+            echo "- \`${ACR_REGISTRY}/${ACR_REPOSITORY}:latest\`"
+          } >> "$GITHUB_STEP_SUMMARY"

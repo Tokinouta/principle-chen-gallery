@@ -36,3 +36,7 @@ npm run build
 ```sh
 npm run verify
 ```
+
+## Deployment
+
+See [`docs/DEPLOYMENT.md`](docs/DEPLOYMENT.md) for the production deployment runbook (Aliyun ECS + Docker Compose + nginx + Litestream→OSS backups).

@@ -1,0 +1,74 @@
+name: galleria-principii
+
+services:
+  api:
+    image: ${API_IMAGE:-crpi-8rw8lz2mj8ksyb8x.cn-beijing.personal.cr.aliyuncs.com/rarara/my-image-registry:latest}
+    container_name: galleria-api
+    restart: unless-stopped
+    env_file:
+      - .env.production
+    environment:
+      HOST: 0.0.0.0
+      PORT: "3000"
+      DATABASE_URL: file:/data/prod.db
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    volumes:
+      - galleria-data:/data
+    expose:
+      - "3000"
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"fetch('http://127.0.0.1:3000/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\""]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+  nginx:
+    image: nginx:1.27-alpine
+    container_name: galleria-nginx
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - galleria-web:/usr/share/nginx/html:ro
+
+  web-assets:
+    image: ${API_IMAGE:-crpi-8rw8lz2mj8ksyb8x.cn-beijing.personal.cr.aliyuncs.com/rarara/my-image-registry:latest}
+    container_name: galleria-web-assets
+    restart: "no"
+    entrypoint: ["sh", "-c"]
+    command:
+      - |
+        set -eu
+        rm -rf /out/*
+        cp -R /app/apps/web/dist/. /out/
+        echo "[web-assets] published web bundle to /out"
+    volumes:
+      - galleria-web:/out
+
+  litestream:
+    image: litestream/litestream:0.3.13
+    container_name: galleria-litestream
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    env_file:
+      - .env.production
+    environment:
+      LITESTREAM_OSS_BUCKET: ${LITESTREAM_OSS_BUCKET:-galleria-principii-backups}
+      LITESTREAM_OSS_PATH: ${LITESTREAM_OSS_PATH:-db/prod.db}
+    command: ["replicate", "-config", "/etc/litestream.yml"]
+    volumes:
+      - galleria-data:/data
+      - ./docker/litestream.yml:/etc/litestream.yml:ro
+
+volumes:
+  galleria-data:
+    driver: local
+  galleria-web:
+    driver: local
